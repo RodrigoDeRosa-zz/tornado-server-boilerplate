@@ -26,5 +26,5 @@ class Server:
         # Configure task scheduler
         Scheduler.example_set_up()
         # Start event loop
-        Logger(cls.__name__).info(f'Listening on http://localhost:{5000}.')
+        Logger(cls.__name__).info(f'Listening on {"https" if ssl else "http"}://localhost:{port}.')
         IOLoop.current().start()

@@ -14,8 +14,8 @@ class ApplicationFactory:
         Logger('ApplicationFactory').info('Creating Tornado Application...')
         # Define location of templates and static files
         settings = {
-            'template_path': abspath(join(dirname(__file__), "../../views/templates")),
-            'static_path': abspath(join(dirname(__file__), "../../views/static"))
+            'template_path': abspath(join(dirname(__file__), "../../../views/templates")),
+            'static_path': abspath(join(dirname(__file__), "../../../views/static"))
         }
         # Create application by assigning routes and the location of view files
         return Application(Router.routes(), **settings)
