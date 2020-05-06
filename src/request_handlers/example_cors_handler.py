@@ -7,7 +7,7 @@ class ExampleCORSHandler(CustomRequestHandler):
     SUPPORTED_METHODS = ['OPTIONS', 'POST', 'GET']
 
     async def post(self):
-        pass
+        self.make_response({'postedSomething': True})
 
     async def get(self):
-        pass
+        self.make_response({'aKey': 'aValue'})
