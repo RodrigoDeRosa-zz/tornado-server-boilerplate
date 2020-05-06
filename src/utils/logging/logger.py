@@ -11,7 +11,7 @@ from src.server.application_context import LoggingData
 class Logger:
     LOGGING_FILE_NAME = 'server.log'
     FORMATTING_STRING = '%(asctime)s - (%(process)d) - %(levelname)s - %(name)s - %(message)s'
-    LOGGING_LEVEL = logging.DEBUG
+    LOGGING_LEVEL = logging.INFO
     MAX_BYTES = (1024 ** 2) * 100  # 100MB
     BACKUP_COUNT = 5  # Keep up to server.log.5
 

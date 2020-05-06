@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from tornado.ioloop import IOLoop
 
+from src.jobs.concurrent_example_job import ConcurrentExampleJob
 from src.jobs.example_job import ExampleJob
 
 
@@ -11,6 +12,7 @@ class Scheduler:
     def example_set_up(cls):
         """ Configure jobs to be run on scheduled times. """
         cls.run_in_millis(ExampleJob.run, millis=100)
+        cls.run_in_millis(ConcurrentExampleJob.run, millis=0)
         # cls.run_every_millis(ExampleJob.run, delta_millis=500)
         # cls.schedule_for_time(ExampleJob.run)  # Run at midnight
 

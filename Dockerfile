@@ -13,4 +13,4 @@ ADD /src /src
 COPY /keys /keys
 COPY /views /views
 # Run app with this command.
-CMD ["python", "/server.py", "--db_host", "mongodb"]
+CMD ["python", "/server.py", "--proc", "2", "--db_host", "mongodb", "--lock_server", "--lock_server_host", "etcd"]

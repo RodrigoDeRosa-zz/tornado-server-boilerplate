@@ -2,6 +2,12 @@ from dataclasses import dataclass
 
 
 @dataclass
+class LockServerData:
+    host: str
+    enabled: bool
+
+
+@dataclass
 class DatabaseData:
     host: str
     port: int
@@ -24,3 +30,4 @@ class ApplicationContext:
     env: str
     db_data: DatabaseData
     logging_data: LoggingData
+    lock_server_data: LockServerData
