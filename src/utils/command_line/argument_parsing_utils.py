@@ -1,10 +1,12 @@
 from argparse import ArgumentParser
 
+from src.server.application_context import ApplicationContext, DatabaseData, LoggingData
+
 
 class ArgumentParsingUtils:
 
     @classmethod
-    def parse_arguments(cls):
+    def parse_arguments(cls) -> ApplicationContext:
         """ Get environment from program argument_parsing. tornado.options could be used instead of ArgumentParser. """
         parser = ArgumentParser()
         # Set up argument values
@@ -24,12 +26,21 @@ class ArgumentParsingUtils:
         # Get program argument_parsing
         args = parser.parse_args()
         # Create DB data dictionary
-        db_data = dict()
-        db_data['host'] = args.db_host
-        db_data['port'] = args.db_port
-        db_data['db_name'] = args.db_name
-        db_data['user'] = args.db_user
-        db_data['password'] = args.db_password
+        db_data = DatabaseData(
+            host=args.db_host,
+            port=args.db_port,
+            name=args.db_name,
+            user=args.db_user,
+            password=args.db_password
+        )
         # UDP logging parameters
-        logging_data = {'log_host': args.log_host, 'log_port': args.log_port}
-        return args.port, args.ssl, args.proc, args.env, db_data, logging_data
+        logging_data = LoggingData(host=args.log_host, port=args.log_port)
+        # Build application context
+        return ApplicationContext(
+            process_number=args.proc,
+            port=args.port,
+            env=args.env,
+            ssl=args.ssl,
+            db_data=db_data,
+            logging_data=logging_data
+        )

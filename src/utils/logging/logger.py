@@ -5,6 +5,8 @@ from os import makedirs
 from os.path import abspath, join, dirname, exists
 from logging.handlers import RotatingFileHandler, SysLogHandler
 
+from src.server.application_context import LoggingData
+
 
 class Logger:
     LOGGING_FILE_NAME = 'server.log'
@@ -14,7 +16,7 @@ class Logger:
     BACKUP_COUNT = 5  # Keep up to server.log.5
 
     @classmethod
-    def set_up(cls, log_host=None, log_port=None):
+    def set_up(cls, logging_data: LoggingData):
         handlers = []
         # File logging handler
         file_name = f'{abspath(join(dirname(__file__), "../../.."))}/logs/{cls.LOGGING_FILE_NAME}'
@@ -22,8 +24,8 @@ class Logger:
         cls.__create_file(file_name)
         handlers.append(RotatingFileHandler(file_name, maxBytes=cls.MAX_BYTES, backupCount=cls.BACKUP_COUNT))
         # UDP logging. This is just an example of how we could switch to UDP logging instead of using a file.
-        if log_host and log_port:
-            handlers.append(SysLogHandler(address=(log_host, int(log_port)), socktype=socket.SOCK_DGRAM))
+        if logging_data.host and logging_data.port:
+            handlers.append(SysLogHandler(address=(logging_data.host, logging_data.port), socktype=socket.SOCK_DGRAM))
         # Console logging handler
         handlers.append(logging.StreamHandler())
         # Configure

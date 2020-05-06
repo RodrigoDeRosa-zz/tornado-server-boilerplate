@@ -1,5 +1,6 @@
 from motor.motor_tornado import MotorClient
 
+from src.server.application_context import DatabaseData
 from src.utils.logging.logger import Logger
 
 
@@ -10,10 +11,10 @@ class Mongo:
     DB = None
 
     @classmethod
-    def init(cls, host, port, db_name, user, password):
+    def init(cls, db_data: DatabaseData):
         """ Create database with asynchronous connector."""
         cls.get_logger().info('Establishing database connection...')
-        uri = cls.__create_uri(host, port, user, password, db_name)
+        uri = cls.__create_uri(db_data.host, db_data.port, db_data.user, db_data.password, db_data.name)
         # Create db client
         cls.__CLIENT = MotorClient(uri)
         cls.DB = cls.__CLIENT.get_default_database()

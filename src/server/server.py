@@ -2,6 +2,7 @@ from tornado.ioloop import IOLoop
 
 from src.database.mongo import Mongo
 from src.jobs.scheduler import Scheduler
+from src.server.application_context import ApplicationContext
 from src.server.http_server_factory import HTTPServerFactory
 from src.server.tornado_application import ApplicationFactory
 from src.utils.command_line.argument_parsing_utils import ArgumentParsingUtils
@@ -13,18 +14,18 @@ class Server:
     @classmethod
     def start(cls):
         # Read command line arguments
-        port, ssl, processes, env, db_data, logging_data = ArgumentParsingUtils.parse_arguments()
+        context: ApplicationContext = ArgumentParsingUtils.parse_arguments()
         # Configure application logging
-        Logger.set_up(**logging_data)
+        Logger.set_up(context.logging_data)
         # Create application and server
         tornado_application = ApplicationFactory.tornado_app()
-        HTTPServerFactory.create(tornado_application, port, ssl).start()
+        HTTPServerFactory.create(tornado_application, context).start(context.process_number)
         # Connect to MongoDB server
-        Mongo.init(**db_data)
+        Mongo.init(context.db_data)
         # This is done so that every incoming request has a pointer to the database connection
         tornado_application.settings['db'] = Mongo.get()
-        # Configure task scheduler
+        # Configure task scheduler. Beware! This will be run on every process, be careful if using multi process.
         Scheduler.example_set_up()
         # Start event loop
-        Logger(cls.__name__).info(f'Listening on {"https" if ssl else "http"}://localhost:{port}.')
+        Logger(cls.__name__).info(f'Listening on {"https" if context.ssl else "http"}://localhost:{context.port}.')
         IOLoop.current().start()
