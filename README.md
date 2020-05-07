@@ -6,8 +6,8 @@ Instructions on how it works will be found below.
 
 ## Table of contents
 
-* [Execution methods](#Execution methods)
-    * [Local execution with venv](#local execution with venv)
+* [Execution methods](#execution%20methods)
+    * [Local execution with venv](#local%20execution%20with%20venv)
     * [Docker](#docker)
     * [Heroku](#heroku)
 
