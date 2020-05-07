@@ -6,14 +6,14 @@ Instructions on how it works will be found below.
 
 ## Table of contents
 
-* [Execution methods](#execution)
-    * [Venv](#venv)
+* [Execution methods](#execution-methods)
+    * [Local execution with venv](#local-execution-with-venv)
     * [Docker](#docker)
     * [Heroku](#heroku)
 
-## Execution
+## Execution methods
 
-### Venv
+### Local execution with venv
 
 #### Requirements
 
@@ -53,6 +53,7 @@ start on port `5000` in `HTTP` mode. If you wanted to change this, refer to the 
 
 The default number of processes is 1; you can change this in the application parameters.
 
+---
 ### Docker
 
 #### Requirements
@@ -87,6 +88,7 @@ In this case, the Tornado server will be running on 2 processes; this is just to
 behaviour and it can be modified in the `Dockerfile`. Check the parameter section for information on how each of them
 works.
 
+---
 ### Heroku
 
 This boilerplate is ready to be on [Heroku](https://www.heroku.com/) with 
