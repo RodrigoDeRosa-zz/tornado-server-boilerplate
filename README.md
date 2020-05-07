@@ -6,14 +6,14 @@ Instructions on how it works will be found below.
 
 ## Table of contents
 
-* [Execution methods](#execution%20methods)
-    * [Local execution with venv](#local%20execution%20with%20venv)
+* [Execution methods](#execution)
+    * [Venv](#venv)
     * [Docker](#docker)
     * [Heroku](#heroku)
 
-## Execution methods
+## Execution
 
-### Local execution with venv
+### Venv
 
 #### Requirements
 
@@ -93,11 +93,11 @@ This boilerplate is ready to be on [Heroku](https://www.heroku.com/) with
 [mLab](https://elements.heroku.com/addons/mongolab) support. For a correct connection to the MongoDB server, make sure
 you define the following environment properties on your Heroku application:
 
-* MONGODB_HOST
-* MONGODB_PORT
-* MONGODB_USER
-* MONGODB_PASSWORD
-* MONGODB_NAME
+* `MONGODB_HOST`
+* `MONGODB_PORT`
+* `MONGODB_USER`
+* `MONGODB_PASSWORD`
+* `MONGODB_NAME`
 
 All of these can be taken from the `MONGO_URI` environment variable you'll already have from adding mLab to your Heroku 
 application.
