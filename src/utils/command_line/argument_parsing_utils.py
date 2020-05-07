@@ -26,6 +26,7 @@ class ArgumentParsingUtils:
         # Lock server related args
         parser.add_argument('--lock_server', default=False, action='store_true', help='Distributed lock server enabler')
         parser.add_argument('--lock_server_host', nargs='?', default=None, help='Distributed lock server hostname')
+        parser.add_argument('--lock_server_port', nargs='?', type=int, default=2379, help='Distributed lock server port')
         # Get program argument_parsing
         args = parser.parse_args()
         # Create DB data dictionary
@@ -39,12 +40,13 @@ class ArgumentParsingUtils:
         # UDP logging parameters
         logging_data = LoggingData(
             host=args.log_host,
-            port=args.log_port
+            port=int(args.log_port)
         )
         # Lock server parameters
         lock_server_data = LockServerData(
             enabled=args.lock_server_host is not None,
-            host=args.lock_server_host
+            host=args.lock_server_host,
+            port=int(args.lock_server_port)
         )
         # Build application context
         return ApplicationContext(

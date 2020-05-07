@@ -5,6 +5,7 @@ from dataclasses import dataclass
 class LockServerData:
     host: str
     enabled: bool
+    port: int
 
 
 @dataclass

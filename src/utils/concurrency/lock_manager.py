@@ -12,7 +12,7 @@ class LockManager:
     def __init__(self, lock_server_data: LockServerData):
         if not lock_server_data.enabled: return
         # Only set up connection if it's enabled
-        self.client = self.__create_client(lock_server_data.host)
+        self.client = self.__create_client(lock_server_data.host, lock_server_data.port)
         self.own_lock = Lock(self.client, 'manager-lock')
         self.locks = dict()
         self.set(self)
@@ -56,15 +56,15 @@ class LockManager:
         self.locks[lock_id].release()
 
     @classmethod
-    def __create_client(cls, etcd_host) -> Client:
+    def __create_client(cls, etcd_host, etcd_port) -> Client:
         """ Create etcd client and test connection. """
         Logger(cls.__name__).info('Connecting to etcd server...')
-        client = Client(host=etcd_host, port=2379)
+        client = Client(host=etcd_host, port=etcd_port)
         # Test connection by trying to read a random value
         try:
             client.read('nodes')
         except EtcdConnectionFailed:
-            raise EtcdConnectionError(port=2379)
+            raise EtcdConnectionError(port=etcd_port)
         except EtcdKeyNotFound:
             # This is to handle the case where etcd did not have the key (we don't care) but it is running
             pass

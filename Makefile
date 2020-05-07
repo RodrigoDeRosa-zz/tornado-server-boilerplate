@@ -1,5 +1,8 @@
 .PHONY: prepare run test
 
+install-requirements:
+	apt-get install -y python3.8 python3-pip python3.8-venv;
+
 prepare:
 	python3.8 -m venv venv; \
 	. venv/bin/activate; \
