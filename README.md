@@ -11,6 +11,8 @@ Instructions on how it works will be found below.
     * [Docker](#docker)
     * [Heroku](#heroku)
 
+**NOTE:** There are still a lot of things to cover in this readme!! It's a WIP!
+
 ## Execution methods
 
 ### Local execution with venv
