@@ -24,7 +24,10 @@ Instructions on how it works will be found below.
 * [Routing](#routing)
 * [Views](#views)
 * [CORS](#cors)
-
+* [Logging](#logging)
+    * [Log Handlers](#log-handlers)
+    * [Logger Instancing](#logger-instancing)
+    
 **NOTE:** There are still a lot of things to cover in this readme!! It's a WIP!
 
 ## Execution methods
@@ -226,3 +229,27 @@ An example of a CORS supporting handler can be found in `src.request_handlers.co
 
 **NOTE:** It is also possible that you will need to accept the `OPTIONS` verb for this cases; this is handled in 
 `src.request_handlers.custom_request_handler.CustomRequestHandler`.
+
+## Logging
+Logging is handled by Python's [logging](https://docs.python.org/3/library/logging.html) library. The `Logger` class can
+be found in `src.utils.logging.logger`.
+
+This class has a few class attributes that are used as basic configuration for the logging system; those are:
+* `FORMATTING_STRING`: The format in which every log line will be displayed.
+* `LOGGING_LEVEL`: Minimum logging level that is displayed in the logs.
+* `LOGGING_FILE_NAME`: Name of the file where the logs will be stored.
+* `MAX_BYTE`: Maximum size of the log file.
+* `BACKUP_COUNT`: Number of files of the maximum size that will be stored using a rotating file method.
+
+### Log handlers
+The current configuration of the `Logger` class logs both to the console and to a file placed in the `/logs/` directory,
+which will be created on startup if it doesn't exist, as well as a file named `server.log`. This is, both a 
+`StreamHandler` and a `RotatingFileHandler` are used by default.
+
+As mentioned in the parameter section, if values for `--log_host` and `--log_port` are passed, a `SysLogHandler` will be
+also added, enabling UDP logging.
+
+### Logger instancing
+To get an instance of `Logger`, you simply need to do `logger = Logger('aName')`, the value passed as parameter will be
+the one filling the `name` field in the logging format. This class could be eventually extended to be a multiton, to
+avoid creating an instance every time you need to log.
