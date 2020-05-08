@@ -16,6 +16,12 @@ Instructions on how it works will be found below.
     * [Database parameters](#database-parameters)
     * [Distributed lock server parameters](#distributed-lock-server-parameters)
 * [HTTPS](#https)
+* [Request handlers](#request-handlers)
+    * [Custom Request Handler](#custom-request-handler)
+    * [HTTP verb handling](#http-verb-handling)
+    * [Path parameters](#path-parameters)
+    * [Sync vs Async](#sync-vs-async)
+* [Routing](#routing)
 * [Views](#views)
 * [CORS](#cors)
 
@@ -157,6 +163,49 @@ is passed on startup.
 SSL configuration is set on the application on `src.server.http_server_factory.HTTPServerFactory`. As you can see, both
 a `certfile` and a `keyfile` are needed; these two files should be located on the `/keys/` directory. This boilerplate
 has two empty files as an example.
+
+## Request Handlers
+All incoming requests in tornado are handled by an specific class that extends from `RequestHandler`. In order to
+centralize certain common methods, this boilerplate has an implementation of a `RequestHandler` subclass found in 
+`src.request_handlers.custom_request_handler.CustomRequestHandler` .
+
+### Custom Request Handler
+This class should be used as the parent class of all newly created request handlers; every example in this boilerplate
+is a subclass of it.
+
+In this class, you will find a centralization of both successful and erroneous response handling; also, it has a generic
+method for handling `OPTIONS` requests, a `prepare()` method that is executed each time a request enters the server and
+a request body mapper that transforms the incoming request body into a dictionary.
+
+### HTTP verb handling
+Every new subclass of `CustomRequestHandler` will be associated to an specific route and will answer every incoming
+request to said route. In every request handler there are two things that must be defined:
+ 
+* The `SUPPORTED_METHODS` attribute, which is a list of HTTP verbs and that defaults to accept every verb. Every non
+included verb will return an HTTP code `405`, for `Method Not Allowed`.
+* A class method for each of the verbs; for example, `def post(self):` to handle `POST` requests.
+
+### Path parameters
+Path parameters are defined when routing and are needed in all request handling methods, even if they are not used. 
+Explanation on how to define them will be found in the routing section.
+ 
+### Sync vs Async
+All request handling methods can be either synchronous (`def post(self):`) or asynchronous (`async def post(self):`);
+this means that requests can be handled both with common Python methods and with Python coroutines. In this boilerplate
+you can see that both the `HealthCheckHandler` and the `ExampleViewHandler` use a synchronous method and all the other 
+handlers use Python coroutines.
+
+Given Tornado's ability to handle coroutines, it is recommended for you to answer requests with coroutines, in order to
+exploit this ability to the maximum.
+
+## Routing
+The relationship between paths and request handlers is defined in `src.server.router.Router`; here, a dictionary that
+relates each path with it's handler is created and is the used in the creation of the Tornado application in 
+`src.server.application_factory.ApplicationFactory`.
+
+Path params are set in the path definition; an example of a path definition with an optional query param is 
+`/resources/?(?P<resource_id>[^/]+)?`. The name on the place holder will also be the name the request handling methods
+will receive when called.
 
 ## Views
 This boilerplate also includes an example of how to serve HTML pages. The settings on the locations of the needed 
