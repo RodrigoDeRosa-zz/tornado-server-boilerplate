@@ -173,5 +173,7 @@ headers. In this boilerplate, CORS can be enabled for a particular `RequestHandl
 `CustomRequestHandler` class attribute `CORS_ENABLED`; if this attribute is `True`, CORS headers will be set on every
 response.
 
+An example of a CORS supporting handler can be found in `src.request_handlers.cors_example.ExampleCORSHandler`.
+
 **NOTE:** It is also possible that you will need to accept the `OPTIONS` verb for this cases; this is handled in 
 `src.request_handlers.custom_request_handler.CustomRequestHandler`.
