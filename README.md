@@ -17,6 +17,7 @@ Instructions on how it works will be found below.
     * [Distributed lock server parameters](#distributed-lock-server-parameters)
 * [HTTPS](#https)
 * [Views](#views)
+* [CORS](#cors)
 
 **NOTE:** There are still a lot of things to cover in this readme!! It's a WIP!
 
@@ -165,3 +166,12 @@ are related to the class from where they are requested; in this case, it would b
 
 In this particular example, resources are located in the `/views/` folder, divided in `templates` and `static`. In the
 first one there is an example HTML file and in the second one a CSS example.
+
+## CORS
+When using this server as a backend for a front end application, you should take into consideration setting the CORS
+headers. In this boilerplate, CORS can be enabled for a particular `RequestHandler` by overriding the 
+`CustomRequestHandler` class attribute `CORS_ENABLED`; if this attribute is `True`, CORS headers will be set on every
+response.
+
+**NOTE:** It is also possible that you will need to accept the `OPTIONS` verb for this cases; this is handled in 
+`src.request_handlers.custom_request_handler.CustomRequestHandler`.
