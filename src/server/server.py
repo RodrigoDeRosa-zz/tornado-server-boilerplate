@@ -4,7 +4,7 @@ from src.database.mongo import Mongo
 from src.jobs.scheduler import Scheduler
 from src.server.application_context import ApplicationContext
 from src.server.http_server_factory import HTTPServerFactory
-from src.server.tornado_application import ApplicationFactory
+from src.server.application_factory import ApplicationFactory
 from src.utils.command_line.argument_parsing_utils import ArgumentParsingUtils
 from src.utils.concurrency.lock_manager import LockManager
 from src.utils.logging.logger import Logger

@@ -15,6 +15,8 @@ Instructions on how it works will be found below.
     * [Logging parameters](#logging-parameters)
     * [Database parameters](#database-parameters)
     * [Distributed lock server parameters](#distributed-lock-server-parameters)
+* [HTTPS](#https)
+* [Views](#views)
 
 **NOTE:** There are still a lot of things to cover in this readme!! It's a WIP!
 
@@ -146,3 +148,20 @@ If you wanted to use an etcd server as a distributed lock server, you need to pa
 * `--lock_server`: Switch that, when passed, indicates that a distributed lock server will be used.
 * `--lock-server-host`: Name of the host where the etcd server is running.
 * `--lock-server-port`: Port where the etcd server is running. Default is `2379`.
+
+## HTTPS
+The server is run on HTTP by default but, as previously mentioned, it can be run on HTTPS mode if the `--ssl` parameter
+is passed on startup.
+
+SSL configuration is set on the application on `src.server.http_server_factory.HTTPServerFactory`. As you can see, both
+a `certfile` and a `keyfile` are needed; these two files should be located on the `/keys/` directory. This boilerplate
+has two empty files as an example.
+
+## Views
+This boilerplate also includes an example of how to serve HTML pages. The settings on the locations of the needed 
+resources are on `src.server.application_factory.ApplicationFactory`. It is important to note that these relative paths
+are related to the class from where they are requested; in this case, it would be from 
+`src.request_handlers.view_example.ExampleViewHandler`.
+
+In this particular example, resources are located in the `/views/` folder, divided in `templates` and `static`. In the
+first one there is an example HTML file and in the second one a CSS example.
