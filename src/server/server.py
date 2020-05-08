@@ -27,7 +27,7 @@ class Server:
         tornado_application.settings['db'] = Mongo.get()
         # Configure task scheduler.
         # Beware! This will be run on every process, be careful if using multi process. Check ConcurrentExampleJob
-        Scheduler.example_set_up()
+        Scheduler.example_set_up(context.lock_server_data.enabled)
         # Connect to distributed lock client. This is the same as with the database
         tornado_application.settings['lock_manager'] = LockManager(context.lock_server_data)
         # Start event loop

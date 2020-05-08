@@ -9,10 +9,10 @@ from src.jobs.example_job import ExampleJob
 class Scheduler:
 
     @classmethod
-    def example_set_up(cls):
+    def example_set_up(cls, lock_server: bool):
         """ Configure jobs to be run on scheduled times. """
         cls.run_in_millis(ExampleJob.run, millis=100)
-        cls.run_in_millis(ConcurrentExampleJob.run, millis=0)
+        if lock_server: cls.run_in_millis(ConcurrentExampleJob.run, millis=0)
         # cls.run_every_millis(ExampleJob.run, delta_millis=500)
         # cls.schedule_for_time(ExampleJob.run)  # Run at midnight
 
