@@ -27,6 +27,11 @@ Instructions on how it works will be found below.
 * [Logging](#logging)
     * [Log Handlers](#log-handlers)
     * [Logger Instancing](#logger-instancing)
+* [MongoDB support](#mongodb-support)
+    * [Mongo server connection](#mongo-server-connection)
+    * [DB global handler](#db-global-handler)
+    * [Generic DAO](#generic-dao)
+
     
 **NOTE:** There are still a lot of things to cover in this readme!! It's a WIP!
 
@@ -253,3 +258,34 @@ also added, enabling UDP logging.
 To get an instance of `Logger`, you simply need to do `logger = Logger('aName')`, the value passed as parameter will be
 the one filling the `name` field in the logging format. This class could be eventually extended to be a multiton, to
 avoid creating an instance every time you need to log.
+
+## MongoDB support
+As previously mentioned, this boilerplate is prepared to use MongoDB as a database management service; said preparation
+includes the ability to specify the host, port, database name and authentication data (as shown previously in the
+command line parameters section), a generic data access object class to be extended when creating new DAOs and a method
+of accessing our database connection instance within the context of any incoming request.
+
+Database support was built over the [Motor](https://motor.readthedocs.io/en/stable/) library, a coroutine-based API for 
+non-blocking access to MongoDB from Tornado or asyncio.
+
+### Mongo server connection
+The connection to the Mongo server is made in `src.database.mongo.Mongo.init()`; in this method, the connection URI is
+built from the received database parameters (or default values if none were received) and a `MotorClient` instance is
+built with said URI.
+
+### DB global handler
+In order to access this database connection instance from every request context, we need to store the connection in a
+singleton fashion as a class attribute of the `Mongo` class. 
+
+To do this, as you can see in `src.server.server#27`, we set a pointer to our instance inside the application settings. 
+Then, upon the reception of a new request, we can set our database pointer in the `CustomRequestHandler.prepare()` 
+method. This allows us to get our database pointer by calling `Mongo.get()` from anywhere in our code.
+
+### Generic DAO
+This boilerplate includes a generic data access object class found in `src.database.generic_dao.GenericDAO`. The point
+of this class is to be the super class of any new DAO class; for example, you can check 
+`src.database.daos.example_dao.ExampleDao`.
+
+This superclass holds most of the needed methods to access a MongoDB collection and defines a method to be implemented 
+by it's subclasses called `collection()`. As you can see in `ExampleDAO`, this method should return a pointer to the
+collection the DAO implementing it should be accessing; in our example, it is the `example` collection.
