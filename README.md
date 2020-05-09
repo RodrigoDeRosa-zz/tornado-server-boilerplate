@@ -18,6 +18,7 @@ Instructions on how it works will be found below.
 * [HTTPS](#https)
 * [Request handlers](#request-handlers)
     * [Custom Request Handler](#custom-request-handler)
+        * [GZIP compression](#gzip-compression)
     * [HTTP verb handling](#http-verb-handling)
     * [Path parameters](#path-parameters)
     * [Sync vs Async](#sync-vs-async)
@@ -27,6 +28,8 @@ Instructions on how it works will be found below.
 * [Logging](#logging)
     * [Log Handlers](#log-handlers)
     * [Logger Instancing](#logger-instancing)
+* [Requesting external services](#requesting-external-services)
+    * [Request retry](#request-retry)
 * [MongoDB support](#mongodb-support)
     * [Mongo server connection](#mongo-server-connection)
     * [DB global handler](#db-global-handler)
@@ -186,6 +189,11 @@ In this class, you will find a centralization of both successful and erroneous r
 method for handling `OPTIONS` requests, a `prepare()` method that is executed each time a request enters the server and
 a request body mapper that transforms the incoming request body into a dictionary.
 
+#### GZIP compression
+It is important to note that the generic `make_response()` method handles gzip compression; this is, when the
+`Accept-Encoding: gzip` header is present, the response will travel encoded as `gzip`. Check this header if you think
+you are not receiving responses in JSON format.
+
 ### HTTP verb handling
 Every new subclass of `CustomRequestHandler` will be associated to an specific route and will answer every incoming
 request to said route. In every request handler there are two things that must be defined:
@@ -259,6 +267,20 @@ also added, enabling UDP logging.
 To get an instance of `Logger`, you simply need to do `logger = Logger('aName')`, the value passed as parameter will be
 the one filling the `name` field in the logging format. This class could be eventually extended to be a multiton, to
 avoid creating an instance every time you need to log.
+
+## Requesting external services
+This boilerplate includes support for doing HTTP requests to external services; a generic class which objective is to
+act as superclass of every new HTTP connector class can be found at 
+`src.http_connectors.generic_http_connector.GenericHTTPConnector`. This class contains one basic functionality and it's
+the ability to make asynchronous HTTP requests to an specific URL using the Tornado `httpclient` library.
+
+A complete example flow can be found following the `ExampleClientHandler`, which uses the `ExampleClientService` and the
+`ExampleClientConnector`.
+
+### Request retry
+It is possible to retry requests to external services by annotating the requesting method with the annotation
+`retry_coroutine`. This annotation could be used for any coroutine but is used as an example for the retrial of our
+example request; a log line was added for every try in order to display this exact behaviour.
 
 ## MongoDB support
 As previously mentioned, this boilerplate is prepared to use MongoDB as a database management service; said preparation

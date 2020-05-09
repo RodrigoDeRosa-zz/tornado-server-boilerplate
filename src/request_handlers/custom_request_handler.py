@@ -48,9 +48,9 @@ class CustomRequestHandler(RequestHandler):
         # Null response is also accepted
         if response_body is not None:
             # This is in case of gzip encoding
-            if GzipUtils.accepts_compression(self.request.headers):
+            if GzipUtils.accepts_gzip_compression(self.request.headers):
                 self.set_header('Content-Encoding', 'gzip')
-                self.write(GzipUtils.compress(str(response_body)))
+                self.write(GzipUtils.gzip_compress(str(response_body)))
             else:
                 # The following is done to accept List responses (Tornado doesn't accept them by default)
                 json_response = response_body if not isinstance(response_body, str) else loads(response_body)

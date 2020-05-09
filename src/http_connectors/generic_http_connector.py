@@ -1,6 +1,7 @@
 from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
 
 from src.model.errors.http_connector_error import HTTPConnectorError
+from src.utils.logging.logger import Logger
 
 
 class GenericHTTPConnector:
@@ -31,3 +32,7 @@ class GenericHTTPConnector:
             request_timeout=timeout,
             validate_cert=verify
         )
+
+    @classmethod
+    def get_logger(cls):
+        return Logger(cls.__name__)

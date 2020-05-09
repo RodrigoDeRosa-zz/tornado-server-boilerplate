@@ -13,6 +13,7 @@ class ExampleClientConnector(GenericHTTPConnector):
     async def get_info_from_client(cls):
         """ Retrieve event from Lookout. """
         try:
+            cls.get_logger().info('Doing request to external service.')
             response = await cls.do_async_request('http://localhost:8573/anExample?aQuery=param')
         except HTTPConnectorError as hce:
             raise ExampleClientError(hce.message)
