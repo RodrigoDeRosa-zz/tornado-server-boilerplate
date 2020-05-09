@@ -34,9 +34,7 @@ Instructions on how it works will be found below.
 * [Distributed lock manager](#distributed-lock-manager)
     * [LockManager class](#lockmanager-class)
     * [Single process coroutine annotation](#single-process-coroutine-annotation)
-
-    
-**NOTE:** There are still a lot of things to cover in this readme!! It's a WIP!
+* [Scheduler](#scheduler)
 
 ## Execution methods
 
@@ -324,3 +322,19 @@ In order for this to work, certain specific parameters were added to the `acquir
 `silent`. The first one, when `False`, avoids waiting for the lock to be released if it was previously acquired by
 returning control to the calling routine; the second one, when `True`, will avoid raising an exception if a lock with
 the given id exists (which means someone already acquired it).
+
+## Scheduler
+This boilerplate holds an example of how to schedule tasks for later execution in a Tornado application using the
+`add_timeout()` method of Tornado's `IOLoop`.
+
+In `src.jobs.scheduler.Scheduler` you can find examples of how to schedule tasks in three different ways:
+* Periodic execution with a delta interval, as seen in `run_every_millis()`.
+* Single execution with a certain delay, as seen in `run_in_millis()`.
+* Run periodically at an specific time, as seen in `schedule_for_time()`.
+
+`Scheduler`'s method `example_set_up()` shows a few examples of how to use these previously mentioned methods. 
+
+As you may see, there is an specific example for a concurrent job in `ConcurrentExampleJobs`. This example uses the 
+`single_process_coroutine` annotation because, as you may imagine, the scheduler runs on every process. The obvious
+result of this behaviour is the multiple execution of the same job on every one of the processes, so take into account
+that problem when running the server on multiple processes without the distributed lock server enabled.
