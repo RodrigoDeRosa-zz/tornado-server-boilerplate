@@ -39,6 +39,8 @@ Instructions on how it works will be found below.
     * [Single process coroutine annotation](#single-process-coroutine-annotation)
 * [Scheduler](#scheduler)
 
+**NOTE:** Next step would be to add configuration management.
+
 ## Execution methods
 
 ### Local execution with venv
