@@ -17,8 +17,8 @@ class GenericHTTPConnector:
             return await client.fetch(request)
         except HTTPError as he:
             raise HTTPConnectorError(he.message)
-        except ConnectionError as re:
-            raise HTTPConnectorError(re)
+        except Exception as e:
+            raise HTTPConnectorError(e)
         finally:
             client.close()
 
