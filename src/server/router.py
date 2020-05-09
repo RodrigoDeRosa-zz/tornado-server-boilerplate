@@ -1,3 +1,4 @@
+from src.request_handlers.client_example.example_client_handler import ExampleClientHandler
 from src.request_handlers.crud_example.example_crud_handler import ExampleCRUDHandler
 from src.request_handlers.cors_example.example_cors_handler import ExampleCORSHandler
 from src.request_handlers.health_check_handler import HealthCheckHandler
@@ -12,6 +13,7 @@ class Router:
         '/ping': HealthCheckHandler,
         '/': ExampleViewHandler,
         '/resources/?(?P<resource_id>[^/]+)?': ExampleCRUDHandler,
+        '/client': ExampleClientHandler,
         '/locking/?(?P<lock_id>[^/]+)?': ExampleLockingHandler,
         '/cors': ExampleCORSHandler
     }
