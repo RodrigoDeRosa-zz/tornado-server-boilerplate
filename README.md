@@ -31,6 +31,9 @@ Instructions on how it works will be found below.
     * [Mongo server connection](#mongo-server-connection)
     * [DB global handler](#db-global-handler)
     * [Generic DAO](#generic-dao)
+* [Distributed lock manager](#distributed-lock-manager)
+    * [LockManager class](#lockmanager-class)
+    * [Single process coroutine annotation](#single-process-coroutine-annotation)
 
     
 **NOTE:** There are still a lot of things to cover in this readme!! It's a WIP!
@@ -289,3 +292,35 @@ of this class is to be the super class of any new DAO class; for example, you ca
 This superclass holds most of the needed methods to access a MongoDB collection and defines a method to be implemented 
 by it's subclasses called `collection()`. As you can see in `ExampleDAO`, this method should return a pointer to the
 collection the DAO implementing it should be accessing; in our example, it is the `example` collection.
+
+## Distributed lock manager
+As previously mentioned, this boilerplate includes the possibility of connecting to an etcd server. The parameters for
+this connection are explained in the command line parameters section.
+
+To handle the access to this server the `src.utils.concurrency.lock_manager.LockManager` class exists. This class works
+in a similar fashion as the `Mongo` class. It receives the connection parameters and tries to connect to an etcd server
+using the [python-etcd](https://pypi.org/project/python-etcd/) library. This class is also an interface for the 
+acquiring and releasing of locks.
+
+### LockManager class
+As previously mentioned, the `LockManager` class works as an interface for acquiring and releasing locks. The 
+implementation of this class was thought to create a new lock every time it's needed to lock and to delete said lock
+upon releasing. This implementation could be modified; it was thought for a dynamic context where it's needed to
+constantly lock for different values.
+
+Access is managed the same way as with the database; the `CustomRequestHandler` sets the reference to our `LockManager`
+instance upon the arriving of a new request in the `prepare()` method; this way, we can get our instance by doing
+`LockManager.get()`.
+
+### Single process coroutine annotation
+In order to make sure certain coroutines are run only once globally (this is not once in each process), the
+`single_process_coroutine` function was created to be used as an annotation.
+
+When annotating a coroutine with this annotation, a lock with a certain id will be acquired for the execution of said 
+method and released upon finishing; the objective is to avoid the rest of the process trying to start the same routine
+resulting in a repeated execution.
+
+In order for this to work, certain specific parameters were added to the `acquire()` methods; these are `blocking` and
+`silent`. The first one, when `False`, avoids waiting for the lock to be released if it was previously acquired by
+returning control to the calling routine; the second one, when `True`, will avoid raising an exception if a lock with
+the given id exists (which means someone already acquired it).
